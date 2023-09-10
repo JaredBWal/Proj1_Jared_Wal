@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Proj1_Jared_Wal</string>
+    <string name="start">START</string>
+    <string name="reset">RESET</string>
+    <string name="perfect_score">Splendid, a perfect score</string>
+    <string name="pay_attention">Please pay more attention</string>
+    <string name="press_red">Press Red</string>
+    <string name="press_blue">Press Blue</string>
+    <string name="press_green">Press Green</string>
+    <string name="press_pink">Press Pink</string>
+    <string name="press_start_to_begin">Press Start to begin</string>
+
+
 </resources>

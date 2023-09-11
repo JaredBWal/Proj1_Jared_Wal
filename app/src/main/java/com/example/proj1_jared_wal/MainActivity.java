@@ -32,13 +32,13 @@ public class MainActivity extends AppCompatActivity {
     int count_right;
     int count_wrong;
 
-    final int COLOR_RED = 0;
-    final int COLOR_BLUE = 1;
-    final int COLOR_GREEN = 2;
-    final int COLOR_PINK = 3;
+    private final int COLOR_RED = 0;
+    private final int COLOR_BLUE = 1;
+    private final int COLOR_GREEN = 2;
+    private final int COLOR_PINK = 3;
 
-    final int COUNTER_STARTING_VALUE = 0;
-    final int GAME_STEP_STARTING_VALUE = 0;
+    private final int COUNTER_STARTING_VALUE = 0;
+    private final int GAME_STEP_STARTING_VALUE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
                 //display right/wrong
                 count_right = COUNTER_STARTING_VALUE;
                 count_wrong = COUNTER_STARTING_VALUE;
-                String count_right_string = "Number Right = " + String.valueOf(count_right);
-                String count_wrong_string = "Number Wrong = " + String.valueOf(count_wrong);
+                String count_right_string = getString(R.string.number_right) + " " + String.valueOf(count_right);
+                String count_wrong_string = getString(R.string.number_wrong) + " " + String.valueOf(count_wrong);
 
                 // make right/wrong visiable and filled with text
                 txt_count_right.setVisibility(View.VISIBLE);

@@ -9,6 +9,8 @@
     <string name="press_green">Press Green</string>
     <string name="press_pink">Press Pink</string>
     <string name="press_start_to_begin">Press Start to begin</string>
+    <string name="number_right">Number Right = </string>
+    <string name="number_wrong">Number Wrong = </string>
 
 
 </resources>

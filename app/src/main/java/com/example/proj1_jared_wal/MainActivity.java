@@ -29,13 +29,16 @@ public class MainActivity extends AppCompatActivity {
     boolean failed_game = false; // keeps track if user lost the game
     boolean game_running = false; // checks if game is live/running
 
-    int count_right = 0;
+    int count_right;
     int count_wrong;
 
     final int COLOR_RED = 0;
     final int COLOR_BLUE = 1;
     final int COLOR_GREEN = 2;
     final int COLOR_PINK = 3;
+
+    final int COUNTER_STARTING_VALUE = 0;
+    final int GAME_STEP_STARTING_VALUE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,15 +69,15 @@ public class MainActivity extends AppCompatActivity {
                 String word = get_color_of_int(color_lst[0]);
 
                 // reset game step
-                game_step = 0;
+                game_step = GAME_STEP_STARTING_VALUE;
 
                 // set booleans for game
                 failed_game = false;
                 game_running = true;
 
                 //display right/wrong
-                count_right = 0;
-                count_wrong = 0;
+                count_right = COUNTER_STARTING_VALUE;
+                count_wrong = COUNTER_STARTING_VALUE;
                 String count_right_string = "Number Right = " + String.valueOf(count_right);
                 String count_wrong_string = "Number Wrong = " + String.valueOf(count_wrong);
 

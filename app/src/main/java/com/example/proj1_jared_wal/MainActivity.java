@@ -351,7 +351,9 @@ public class MainActivity extends AppCompatActivity {
 
             // get the proper color to display:
             String word = "";
-            if (game_step == 1) {
+            Log.d("tag_1", Integer.toString(game_step));
+
+            if (game_step == 0) {
                 word = get_color_of_int(color_lst[0]);
             }else{
                 word = get_color_of_int(color_lst[1]);

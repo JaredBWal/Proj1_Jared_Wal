@@ -3,6 +3,7 @@ package com.example.proj1_jared_wal;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     boolean failed_game = false; // keeps track if user lost the game
     boolean game_running = false; // checks if game is live/running
+    boolean end_game_screen = false;
 
     int count_right;
     int count_wrong;
@@ -40,10 +42,31 @@ public class MainActivity extends AppCompatActivity {
     private final int COUNTER_STARTING_VALUE = 0;
     private final int GAME_STEP_STARTING_VALUE = 0;
 
+
+    private static final String SAVED_GAME_RUNNING = "saved_game_running";
+    private static final String SAVED_FAILED_GAME = "saved_failed_game";
+    private static final String SAVED_GAME_STEP = "saved_game_step";
+    private static final String SAVED_COLOR_LIST = "saved_color_list";
+    private static final String SAVED_COUNT_RIGHT = "saved_count_right";
+    private static final String SAVED_COUNT_WRONG = "saved_count_wrong";
+    private static final String SAVED_END_GAME_SCREEN = "saved_end_game_screen";
+
+
+
+
+    // save values : count_right, count_wrong, game_running, failed_game, game_step, color_list
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.i("tag_1", "onCreate");
+
+        if (savedInstanceState != null){
+            Log.i("tag_1", savedInstanceState.toString());
+            Log.d("tag_1", "SOMETHING IN INSTANCE STATE ");
+            // TODO implement bundle saving
+        }
 
         txt_intruct = findViewById(R.id.txt_instructions);
         btn_reset = findViewById(R.id.btn_reset);
@@ -74,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 // set booleans for game
                 failed_game = false;
                 game_running = true;
+                end_game_screen = false;
 
                 //display right/wrong
                 count_right = COUNTER_STARTING_VALUE;
@@ -111,6 +135,9 @@ public class MainActivity extends AppCompatActivity {
                 txt_count_right.setVisibility(View.INVISIBLE);
                 txt_count_wrong.setVisibility(View.INVISIBLE);
 
+                //set game attributes
+                game_running = false;
+                end_game_screen = false;
 
                 // say to press start to start game
                 txt_intruct.setText(R.string.press_start_to_begin);
@@ -174,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     } //onCreate()
 
 
@@ -196,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
             txt_intruct.setText(R.string.perfect_score);
         }
 
+        end_game_screen = true;
         game_running = false;
     }
 
@@ -264,5 +291,136 @@ public class MainActivity extends AppCompatActivity {
         color_lst[1] = rand.nextInt(4);
     }
 
+    protected void onStop() {
+        super.onStop();
+        Log.i("tag_1", "Stopped");
+    }
+    protected void onPause() {
+        super.onPause();
+        Log.i("tag_1", "Paused");
+    }
+    protected void onRestart() {
+        super.onRestart();
+        Log.i("tag_1", "Restart");
+    }
+    protected void onResume() {
+        super.onResume();
+        Log.i("tag_1", "Resume");
+    }
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("tag_1", "Destroy");
+    }
+    protected void onStart() {
+        super.onStart();
+        Log.i("tag_1", "Start");
+    }
+
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d("tag_1", "SAVED ");
+        outState.putBoolean(SAVED_GAME_RUNNING, game_running);
+        outState.putBoolean(SAVED_FAILED_GAME, failed_game);
+        outState.putInt(SAVED_GAME_STEP, game_step);
+        outState.putIntArray(SAVED_COLOR_LIST, color_lst);
+        outState.putInt(SAVED_COUNT_RIGHT, count_right);
+        outState.putInt(SAVED_COUNT_WRONG, count_wrong);
+        outState.putBoolean(SAVED_END_GAME_SCREEN, end_game_screen);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.d("tag_1", "RESTORED ");
+        Log.d("tag_1", "onRestoreInstanceState, i=" + savedInstanceState.getInt(SAVED_GAME_STEP));
+
+        game_running = savedInstanceState.getBoolean(SAVED_GAME_RUNNING);
+        failed_game = savedInstanceState.getBoolean(SAVED_FAILED_GAME);
+        game_step = savedInstanceState.getInt(SAVED_GAME_STEP);
+        color_lst = savedInstanceState.getIntArray(SAVED_COLOR_LIST);
+        count_right = savedInstanceState.getInt(SAVED_COUNT_RIGHT);
+        count_wrong = savedInstanceState.getInt(SAVED_COUNT_WRONG);
+        end_game_screen = savedInstanceState.getBoolean(SAVED_END_GAME_SCREEN);
+
+
+        if (game_running){
+            // game is running
+
+            // get the proper color to display:
+            String word = "";
+            if (game_step == 1) {
+                word = get_color_of_int(color_lst[0]);
+            }else{
+                word = get_color_of_int(color_lst[1]);
+            }
+            String count_right_string = getString(R.string.number_right) + " " + String.valueOf(count_right);
+            String count_wrong_string = getString(R.string.number_wrong) + " " + String.valueOf(count_wrong);
+
+            // make right/wrong visiable and filled with text
+
+            txt_count_right.setVisibility(View.VISIBLE);
+            txt_count_wrong.setVisibility(View.VISIBLE);
+
+            txt_count_right.setText(count_right_string);
+            txt_count_wrong.setText(count_wrong_string);
+
+
+            txt_intruct.setText(word);
+
+            // so make start button grey and disabled, and reset enabled and purple
+
+            // set start btn attributes to greyed out
+            btn_start.setBackgroundColor(getColor(R.color.grey));
+            btn_start.setTextColor(getColor(R.color.dark_grey));
+            btn_start.setEnabled(false);
+
+            // set reset btn attribute to active
+            btn_reset.setBackgroundColor(getColor(R.color.purple));
+            btn_reset.setTextColor(getColor(R.color.white));
+            btn_reset.setEnabled(true);
+
+        }else{
+            // game is not running, but it is on end_game_screen
+            if (end_game_screen){
+                Log.d("tag_1", "END GAME ");
+                // so make start button grey and disabled, and reset enabled and purple
+
+                // set start btn attributes to greyed out
+                btn_start.setBackgroundColor(getColor(R.color.grey));
+                btn_start.setTextColor(getColor(R.color.dark_grey));
+                btn_start.setEnabled(false);
+
+                // set reset btn attribute to active
+                btn_reset.setBackgroundColor(getColor(R.color.purple));
+                btn_reset.setTextColor(getColor(R.color.white));
+                btn_reset.setEnabled(true);
+
+
+                // display proper instruction text:
+                if (count_right >= 2) {
+                    txt_intruct.setText(R.string.perfect_score);
+                }else{
+                    txt_intruct.setText(R.string.pay_attention);
+                }
+
+                // display counts:
+                String count_right_string = getString(R.string.number_right) + " " + String.valueOf(count_right);
+                String count_wrong_string = getString(R.string.number_wrong) + " " + String.valueOf(count_wrong);
+
+
+                txt_count_right.setVisibility(View.VISIBLE);
+                txt_count_wrong.setVisibility(View.VISIBLE);
+
+                txt_count_right.setText(count_right_string);
+                txt_count_wrong.setText(count_wrong_string);
+
+            }
+        }
+
+
+    }
 
 }
